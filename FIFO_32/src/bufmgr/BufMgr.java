@@ -4,7 +4,6 @@ import global.GlobalConst;
 import global.Minibase;
 import global.Page;
 import global.PageId;
-import java.util.HashMap;
 
 /* revised slightly by sharma on 8/22/2023 */
 
@@ -44,9 +43,10 @@ public class BufMgr implements GlobalConst {
      * modify the print method with variables you have used
      */
     // -------------------------------------------------------------
-    private int totPageHits = 0, totPageRequests = 0, pageLoadHits = 0, pageLoadRequests = 0,
-            uniquePageLoads = 0, pageFaults = 0;
+    private int totPageHits = 0, totPageRequests = 0;
+
     private double aggregateBHR, pageLoadBHR;
+    
     // // First k page references
     int z = NUMBUF * 100;
     int[][] pageRefCount = new int[z][4];
@@ -367,11 +367,11 @@ public class BufMgr implements GlobalConst {
         System.out.println("+----------------------------------------+");
         
         
-        sortbyColumn(pageRefCount, 1);
-        // Added this
-        System.out.println("Page No.\t\tNo. of Loads\tNo. of Hits");
+        sortbyColumn(pageRefCount, 2);
+        
+        System.out.println("   Page No.\tNo. of Hits(Top 5 Page refrences)");
         for (int i = 0; i < 5; i++) {
-            System.out.println("\t" + pageRefCount[i][0] + "\t\t" + pageRefCount[i][1] + "\t\t" + pageRefCount[i][2]);
+            System.out.println("\t" + pageRefCount[i][0] +"\t\t" + pageRefCount[i][2]);
         }
         
         /*

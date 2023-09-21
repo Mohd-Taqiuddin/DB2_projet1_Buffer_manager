@@ -44,9 +44,10 @@ public class BufMgr implements GlobalConst {
      * modify the print method with variables you have used
      */
     // -------------------------------------------------------------
-    private int totPageHits = 0, totPageRequests = 0, pageLoadHits = 0, pageLoadRequests = 0,
-            uniquePageLoads = 0, pageFaults = 0;
+    private int totPageHits = 0, totPageRequests = 0;
+
     private double aggregateBHR, pageLoadBHR;
+
     // // First k page references
     int z = NUMBUF * 100;
     int[][] pageRefCount = new int[z][4];
@@ -188,8 +189,8 @@ public class BufMgr implements GlobalConst {
                     totPageRequests++;
                     for (int i = 0; i < z; i++) {
                         if (pageRefCount[i][0] == pageno.pid) {
-                            pageRefCount[i][2]++;
-                            pageRefCount[i][1]++;
+                            pageRefCount[i][2]++; // incrementing hits in refcount array
+                            pageRefCount[i][1]++; // incrementing loads in refcount array
                             break;
                         }
                     }
@@ -362,16 +363,16 @@ public class BufMgr implements GlobalConst {
         aggregateBHR = (double) totPageHits / totPageRequests; // replce -1 with the formula
 
         System.out.print("Aggregate BHR (BHR1): ");
-        System.out.printf("%9.5f\n", aggregateBHR);
+        System.out.printf("%9.8f\n", aggregateBHR);
 
         System.out.println("+----------------------------------------+");
         
         
-        sortbyColumn(pageRefCount, 1);
-        // Added this
-        System.out.println("Page No.\t\tNo. of Loads\tNo. of Hits");
+        sortbyColumn(pageRefCount, 2);
+        
+        System.out.println("   Page No.\tNo. of Hits(Top 5 Page refrences)");
         for (int i = 0; i < 5; i++) {
-            System.out.println("\t" + pageRefCount[i][0] + "\t\t" + pageRefCount[i][1] + "\t\t" + pageRefCount[i][2]);
+            System.out.println("\t" + pageRefCount[i][0] +"\t\t" + pageRefCount[i][2]);
         }
         
         /*
